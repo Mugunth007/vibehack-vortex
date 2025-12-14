@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 15 23 42;
+  /* slate-950 */
+  --foreground: 226 232 240;
+  /* slate-200 */
+}
+
+body {
+  @apply bg-slate-950 text-slate-300 antialiased overflow-x-hidden font-sans;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Aceternity-style Animated Grid Background */
+.bg-grid-slate-900 {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, transparent, 10%, white, 90%, transparent);
+}
+
+.bg-dot-slate-800 {
+  background-size: 40px 40px;
+  background-image: radial-gradient(circle, rgba(30, 41, 59, 0.8) 1px, transparent 1px);
+}
+
+/* Merged animations.css */
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+    background-size: 200% 100%;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+/* Merged components.css */
+@layer components {
+  .glass-card {
+    @apply bg-slate-900/60 backdrop-blur-xl border border-slate-800/50 shadow-xl;
+  }
+
+  .glass-card-hover {
+    @apply hover:bg-slate-800/60 hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-cyan-500/10;
+  }
+
+  .glass-panel {
+    @apply bg-slate-950/80 backdrop-blur-md border border-slate-800;
+  }
+
+  .btn-gradient {
+    @apply bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:shadow-lg hover:shadow-cyan-500/20 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent hover:bg-slate-800 text-slate-300 hover:text-white transition-colors duration-200;
+  }
+
+  .input-glass {
+    @apply bg-slate-900/50 border border-slate-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all duration-200 placeholder-slate-500;
+  }
+}
