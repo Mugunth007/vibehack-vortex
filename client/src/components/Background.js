@@ -3,16 +3,11 @@ import React from 'react';
 const Background = () => {
     return (
         <div className="fixed inset-0 z-[-1] overflow-hidden bg-slate-950">
-            {/* Animated Grid */}
-            <div className="absolute inset-0 bg-grid-slate-900/[0.04] bg-[length:50px_50px]" />
+            {/* Subtle Grid Pattern */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(30,41,59,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(30,41,59,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-            {/* Radial Gradient Overlay */}
-            <div className="absolute inset-0 bg-slate-950 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
-
-            {/* Floating Orbs */}
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-500/20 blur-[100px] animate-float" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-500/20 blur-[100px] animate-float delay-1000" />
-            <div className="absolute top-[40%] left-[40%] w-[30%] h-[30%] rounded-full bg-blue-500/10 blur-[120px] animate-pulse-slow" />
+            {/* Very Subtle Radial Gradient */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(15,23,42,0.5)_0%,rgba(2,6,23,1)_70%)]" />
         </div>
     );
 };

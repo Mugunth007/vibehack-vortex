@@ -101,12 +101,12 @@ const SavedTemplates = ({ templates, loading, error }) => {
                     </List>
                 </Box>
             ) : (
-                <Box sx={{ 
-                    textAlign: 'center', 
+                <Box sx={{
+                    textAlign: 'center',
                     py: 4,
-                    backgroundColor: '#fafafa',
+                    backgroundColor: 'rgba(15, 23, 42, 0.5)',
                     borderRadius: 2,
-                    border: '1px dashed #ccc'
+                    border: '1px dashed #334155'
                 }}>
                     <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
                         No templates found

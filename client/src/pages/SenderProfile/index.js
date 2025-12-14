@@ -1,11 +1,9 @@
 import React from 'react';
-import { Typography, Container, Box, Button, Grid } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-// Sidebar removed
-import Footer from '../../components/Footer';
-import { useSenderProfiles } from '../../hooks/useSenderProfiles';
 import { useNavigate } from 'react-router-dom';
+import { Plus, Send } from 'lucide-react';
+import { useSenderProfiles } from '../../hooks/useSenderProfiles';
 import ResponsiveSenderProfilesTable from '../../components/ResponsiveSenderProfilesTable';
+import GradientButton from '../../components/GradientButton';
 
 const SenderProfile = () => {
     const navigate = useNavigate();
@@ -20,56 +18,40 @@ const SenderProfile = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: "#fafafa" }}>
-            {/* Sidebar removed */}
-            <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                <Container maxWidth="lg" sx={{ flexGrow: 1, mt: '110px', mb: 2 }}>
-                    <Grid container spacing={2}>
-                        <Grid sx={{ pl: 2, pb: 2 }} xs={12} md={8} lg={8}>
-                            <Typography
-                                sx={{
-                                    mb: 1,
-                                    fontWeight: 500,
-                                    background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
-                                    backgroundClip: 'text',
-                                    WebkitBackgroundClip: 'text',
-                                    WebkitTextFillColor: 'transparent',
-                                    fontSize: { xs: '1rem', md: '1.5rem' }
-                                }}
-                                variant="h4"
-                                color="primary"
-                            >
-                                Sender Profiles
-                            </Typography>
-                            <Typography sx={{ fontSize: '0.8rem' }} color="text.secondary">
-                                Configure and manage SMTP sender profiles for your email campaigns.
-                            </Typography>
-                        </Grid>
-                        <Grid sx={{ p: 2 }} xs={12} md={4} lg={4}>
-                            <Grid container justifyContent="flex-end">
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    startIcon={<AddIcon />}
-                                    onClick={handleCreateSenderProfile}
-                                >
-                                    Setup SMTP
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+        <div className="space-y-8 animate-fade-in-up">
+            {/* Page Header */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+                            <Send className="w-5 h-5 text-white" />
+                        </div>
+                        <h1 className="text-3xl font-bold text-white">
+                            Sender Profiles
+                        </h1>
+                    </div>
+                    <p className="text-slate-400 max-w-2xl">
+                        Configure and manage SMTP sender profiles for your email campaigns.
+                    </p>
+                </div>
+                <GradientButton
+                    onClick={handleCreateSenderProfile}
+                    icon={Plus}
+                    className="w-full md:w-auto px-6 h-12"
+                >
+                    Setup SMTP
+                </GradientButton>
+            </div>
 
-                    <Box sx={{ width: '100%', mt: 2 }}>
-                        <ResponsiveSenderProfilesTable
-                            senderProfiles={senderProfiles}
-                            loading={loading}
-                            onDeleteProfile={handleDeleteProfile}
-                        />
-                    </Box>
-                </Container>
-                <Footer />
-            </Box>
-        </Box>
+            {/* Sender Profiles Table */}
+            <div className="w-full">
+                <ResponsiveSenderProfilesTable
+                    senderProfiles={senderProfiles}
+                    loading={loading}
+                    onDeleteProfile={handleDeleteProfile}
+                />
+            </div>
+        </div>
     );
 };
 

@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 // Sidebar removed
-import Footer from '../../components/Footer';
+
 import EmailClick from './EmailClick';
 import Submission from './Submission';
 import CampaignDetailsCard from './CampaignDetailsCard';
@@ -343,7 +343,7 @@ const CampaignDetail = () => {
                     </DialogActions>
                 </Dialog>
 
-                <Footer />
+
             </Box>
         </Box>
     );

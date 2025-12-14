@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Container, Box, Button, Grid, TextField, MenuItem, CircularProgress, LinearProgress, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; // For redirection after starting the campaign
 // Sidebar removed
-import Footer from '../../components/Footer';
+
 import { ReactComponent as SuccessIcon } from '../../assets/icons/success.svg';
 import { useResources } from '../../hooks/useResources';
 import { usePrepareCampaign, useStartCampaign } from '../../hooks/useCampaign';
@@ -68,7 +68,7 @@ const StartCampaign = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: "#fafafa" }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh' }}>
             {/* Sidebar removed */}
             <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 {campaignPrepared ? ( // Show "Your campaign is ready" view if campaign is prepared
@@ -368,7 +368,7 @@ const StartCampaign = () => {
                         )}
                     </Container>
                 )}
-                <Footer />
+
             </Box>
         </Box>
     );

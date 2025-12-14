@@ -1,15 +1,14 @@
 import React from 'react';
-import { Typography, Container, Box, Button, Grid, Card, CardContent, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import AddIcon from '@mui/icons-material/Add';
-// Sidebar removed (handled by Layout)
-import Footer from '../../components/Footer';
+import { Plus, Users, AlertCircle, Loader2 } from 'lucide-react';
 import { useAudience } from '../../hooks/useAudience';
 import { formatCardDate } from '../../utils/dateUtils';
+import GlassCard from '../../components/GlassCard';
+import GradientButton from '../../components/GradientButton';
 
 const Audience = () => {
     const navigate = useNavigate();
-    const { audiences, loading, error } = useAudience(); // Use the hook to get audiences
+    const { audiences, loading, error } = useAudience();
 
     const handleCreateAudience = () => {
         navigate('/console/audience/create');
@@ -20,163 +19,106 @@ const Audience = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: "#fafafa" }}>
-            {/* Sidebar removed */}
-            <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                <Container maxWidth="lg" sx={{ flexGrow: 1, mt: '110px', mb: 2 }}>
-                    <Grid container spacing={2} sx={{ mb: 2 }}>
-                        <Grid sx={{ pl: 2, pb: 2 }} xs={12} md={8} lg={8}>
-                            <Typography
-                                sx={{
-                                    mb: 1,
-                                    fontWeight: 500,
-                                    background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
-                                    backgroundClip: 'text',
-                                    WebkitBackgroundClip: 'text',
-                                    WebkitTextFillColor: 'transparent',
-                                    fontSize: { xs: '1rem', md: '1.5rem' }
-                                }}
-                                variant="h4"
-                                color="primary"
-                            >
-                                Audience
-                            </Typography>
-                            <Typography sx={{ fontSize: '0.8rem' }} color="text.secondary">
-                                Manage your contacts and target audience for phishing campaigns.
-                            </Typography>
-                        </Grid>
-                        <Grid sx={{ p: 2, pr: 0.5 }} xs={12} md={4} lg={4}>
-                            <Grid container justifyContent="flex-end">
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleCreateAudience}
-                                    startIcon={<AddIcon />}
-                                >
-                                    Create Audience
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+        <div className="space-y-8 animate-fade-in-up">
+            {/* Page Header */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-white mb-2">
+                        Audience
+                    </h1>
+                    <p className="text-slate-400 max-w-2xl">
+                        Manage your contacts and target audience for phishing campaigns.
+                    </p>
+                </div>
+                <GradientButton
+                    onClick={handleCreateAudience}
+                    icon={Plus}
+                    className="w-full md:w-auto px-6 h-12"
+                >
+                    Create Audience
+                </GradientButton>
+            </div>
 
-                    {/* Audience Card List */}
-                    <Grid container spacing={3}>
-                        {/* Show loading message if loading */}
-                        {loading && (
-                            <Grid item xs={12}>
-                                <Box sx={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    py: 6
-                                }}>
-                                    <Typography
-                                        variant="h6"
-                                        align="center"
-                                        color='text.secondary'
-                                        sx={{
-                                            fontWeight: 500,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: 1
-                                        }}
-                                    >
-                                        Loading audiences...
-                                    </Typography>
-                                </Box>
-                            </Grid>
-                        )}
+            {/* Loading State */}
+            {loading && (
+                <div className="flex items-center justify-center py-16">
+                    <div className="flex items-center gap-3 text-slate-400">
+                        <Loader2 className="w-6 h-6 animate-spin text-cyan-400" />
+                        <span>Loading audiences...</span>
+                    </div>
+                </div>
+            )}
 
-                        {/* Show error message if error */}
-                        {error && (
-                            <Grid item xs={12}>
-                                <Alert
-                                    severity="warning"
-                                    variant="outlined"
-                                    sx={{
-                                        borderRadius: '8px',
-                                        borderWidth: '1px',
-                                        '& .MuiAlert-icon': {
-                                            fontSize: '1.25rem'
-                                        }
-                                    }}
-                                >
-                                    {error}
-                                </Alert>
-                            </Grid>
-                        )}
+            {/* Error State */}
+            {error && (
+                <GlassCard className="p-6 border-rose-500/30 !bg-rose-500/10">
+                    <div className="flex items-center gap-3 text-rose-400">
+                        <AlertCircle className="w-5 h-5" />
+                        <span>{error}</span>
+                    </div>
+                </GlassCard>
+            )}
 
-                        {!loading && !error && audiences.length === 0 && (
-                            <Grid item xs={12}>
-                                <Box sx={{
-                                    textAlign: 'center',
-                                    py: 4,
-                                    backgroundColor: '#fafafa',
-                                    borderRadius: 2,
-                                    border: '1px dashed #ccc'
-                                }}>
-                                    <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
-                                        No audiences found
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        You haven't created any audiences yet. Create your first audience to get started.
-                                    </Typography>
-                                </Box>
-                            </Grid>
-                        )}
+            {/* Empty State */}
+            {!loading && !error && audiences.length === 0 && (
+                <GlassCard className="p-12 text-center">
+                    <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-slate-800/50 flex items-center justify-center">
+                        <Users className="w-8 h-8 text-slate-500" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-2">No audiences found</h3>
+                    <p className="text-slate-400 mb-6 max-w-md mx-auto">
+                        You haven't created any audiences yet. Create your first audience to get started.
+                    </p>
+                    <GradientButton
+                        onClick={handleCreateAudience}
+                        icon={Plus}
+                        className="mx-auto p-4"
+                    >
+                        Create Your First Audience
+                    </GradientButton>
+                </GlassCard>
+            )}
 
-                        {/* Display audience cards if data is available */}
-                        {!loading && !error && audiences.map((audience) => (
-                            <Grid item xs={12} sm={6} md={4} key={audience._id}>
-                                <Box
-                                    onClick={() => handleViewAudience(audience._id)}
-                                    sx={{
-                                        cursor: 'pointer',
-                                        '&:hover': { backgroundColor: '#f5f5f5' },
-                                    }}>
+            {/* Audience Cards Grid */}
+            {!loading && !error && audiences.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {audiences.map((audience) => (
+                        <GlassCard
+                            key={audience._id}
+                            className="p-6 cursor-pointer group hover:border-cyan-500/30 transition-all duration-300"
+                            onClick={() => handleViewAudience(audience._id)}
+                        >
+                            <div className="flex items-start justify-between">
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="text-lg font-semibold text-white truncate group-hover:text-cyan-400 transition-colors">
+                                        {audience.name}
+                                    </h3>
+                                    <p className="text-sm text-slate-500 mt-1">
+                                        Created {formatCardDate(audience.createdAt)}
+                                    </p>
+                                </div>
+                                <div className="text-right ml-4">
+                                    <p className="text-3xl font-bold text-cyan-400">
+                                        {audience.contactCount}
+                                    </p>
+                                    <p className="text-xs text-slate-500 uppercase tracking-wider">
+                                        Contacts
+                                    </p>
+                                </div>
+                            </div>
 
-                                    <Card>
-                                        <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
-                                                <Typography
-                                                    sx={{
-                                                        mt: 1,
-                                                        whiteSpace: 'nowrap',       // Prevent wrapping
-                                                        overflow: 'hidden',         // Hide overflowing text
-                                                        textOverflow: 'ellipsis',   // Show ellipsis for truncated text
-                                                        maxWidth: '100%',           // Ensure it fits within the container
-                                                        display: 'block',           // Enforce block-level behavior for truncation
-                                                        fontWeight: 500,            // Medium weight
-                                                        color: '#1a1a1a',           // Dark gray (less harsh than pure black)
-                                                    }}
-                                                    variant="h6"
-                                                    component="div"
-                                                >
-                                                    {audience.name}
-                                                </Typography>
-                                                <Typography sx={{ mb: 1.5 }} variant="subtitle2" color="text.secondary">
-                                                    Created {formatCardDate(audience.createdAt)}
-                                                </Typography>
-                                            </Box>
-                                            <Box sx={{ textAlign: 'right', ml: 2 }}>  {/* Ensure spacing between name and contacts */}
-                                                <Typography variant="h4" color="primary">
-                                                    {audience.contactCount}
-                                                </Typography>
-                                                <Typography variant="subtitle2" color="text.secondary">
-                                                    Contacts
-                                                </Typography>
-                                            </Box>
-                                        </CardContent>
-                                    </Card>
-
-                                </Box>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Container>
-                <Footer />
-            </Box>
-        </Box>
+                            {/* Hover indicator */}
+                            <div className="mt-4 pt-4 border-t border-slate-800/50 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span className="text-xs text-slate-500">Click to view details</span>
+                                <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                                    <Users className="w-3 h-3 text-cyan-400" />
+                                </div>
+                            </div>
+                        </GlassCard>
+                    ))}
+                </div>
+            )}
+        </div>
     );
 };
 

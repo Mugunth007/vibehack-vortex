@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Container, Typography, Grid, Divider } from '@mui/material';
 import { Line } from 'react-chartjs-2';
 import Sidebar from '../../components/Sidebar';  // Import Sidebar
-import Footer from '../../components/Footer';    // Import Footer
+
 import { Chart, TimeScale, LinearScale, CategoryScale, PointElement, LineElement, ArcElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import 'chartjs-adapter-dayjs-4'; // Correct adapter for Chart.js v4
 import { useDashboard } from '../../hooks/useDashboard'; // Import the useDashboard hook
@@ -15,7 +15,7 @@ const Timeline = () => {
     const { timelineData, loading, error } = useDashboard(); // Fetch timeline data using the hook
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: "#fafafa" }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh' }}>
             {/* Sidebar */}
             <Sidebar />
 
@@ -48,7 +48,7 @@ const Timeline = () => {
 
                 </Container>
 
-                <Footer />
+
             </Box>
         </Box>
     );

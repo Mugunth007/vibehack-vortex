@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Container, TextField, Button, Grid, FormControlLabel, Checkbox, CircularProgress, Alert, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 // Sidebar removed
-import Footer from '../../components/Footer';
+
 import { useNavigate } from 'react-router-dom';
 import { useSenderProfiles } from '../../hooks/useSenderProfiles'; // Import the hook
 
@@ -41,7 +41,7 @@ const CreateSenderProfile = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: "#fafafa" }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh' }}>
             {/* Sidebar removed */}
             <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 <Container maxWidth="lg" sx={{ flexGrow: 1, mt: '110px', mb: 2 }}>
@@ -197,7 +197,7 @@ const CreateSenderProfile = () => {
                         </Grid>
                     </form>
                 </Container>
-                <Footer />
+
             </Box>
         </Box>
     );

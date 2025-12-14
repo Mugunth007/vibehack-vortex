@@ -26,14 +26,106 @@ import CampaignDetail from './pages/Campaign/CampaignDetail';
 import NotFoundPage from './pages/NotFound';
 
 const THEME = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#06b6d4', // cyan-500
+      light: '#22d3ee',
+      dark: '#0891b2',
+    },
+    secondary: {
+      main: '#8b5cf6', // purple-500
+    },
+    background: {
+      default: '#020617', // slate-950
+      paper: '#0f172a', // slate-900
+    },
+    text: {
+      primary: '#f8fafc', // slate-50
+      secondary: '#94a3b8', // slate-400
+    },
+    divider: '#1e293b', // slate-800
+    error: {
+      main: '#f43f5e', // rose-500
+    },
+    success: {
+      main: '#10b981', // emerald-500
+    },
+    warning: {
+      main: '#f59e0b', // amber-500
+    },
+  },
   typography: {
-    fontFamily: '"Montserrat", sans-serif',
-    fontSize: 12,
+    fontFamily: '"Inter", "Montserrat", sans-serif',
+    fontSize: 13,
     fontWeightLight: 400,
     fontWeightRegular: 500,
-    fontWeightMedium: 500,
+    fontWeightMedium: 600,
     fontWeightSemiBold: 600,
     fontWeightBold: 700,
+  },
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#0f172a',
+          borderRadius: '16px',
+          border: '1px solid #1e293b',
+          boxShadow: 'none',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: '12px',
+          textTransform: 'none',
+          fontWeight: 600,
+        },
+        contained: {
+          background: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+          boxShadow: '0 4px 14px 0 rgba(6, 182, 212, 0.3)',
+          '&:hover': {
+            background: 'linear-gradient(135deg, #22d3ee 0%, #60a5fa 100%)',
+            boxShadow: '0 6px 20px 0 rgba(6, 182, 212, 0.4)',
+          },
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#0f172a',
+          backgroundImage: 'none',
+        },
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          borderRadius: '12px',
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '12px',
+            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+            '& fieldset': {
+              borderColor: '#1e293b',
+            },
+            '&:hover fieldset': {
+              borderColor: '#334155',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#06b6d4',
+            },
+          },
+        },
+      },
+    },
   },
 });
 

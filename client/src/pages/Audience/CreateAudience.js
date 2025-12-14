@@ -4,7 +4,7 @@ import {
     Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
 } from '@mui/material';
 // Sidebar removed
-import Footer from '../../components/Footer';
+
 import { useNavigate } from 'react-router-dom'; // For redirection
 import { useAudience } from '../../hooks/useAudience';
 
@@ -59,7 +59,7 @@ const CreateAudience = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: "#fafafa" }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh' }}>
             {/* Sidebar removed */}
             <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 <Container maxWidth="lg" sx={{ flexGrow: 1, mt: '110px', mb: 2 }}>
@@ -141,7 +141,7 @@ const CreateAudience = () => {
                         </Grid>
                     </form>
                 </Container>
-                <Footer />
+
             </Box>
 
             {/* Success Dialog */}

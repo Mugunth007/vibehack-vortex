@@ -61,9 +61,14 @@ const Dashboard = () => {
     <div className="space-y-8 animate-fade-in-up">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">
-          Simulation Dashboard
-        </h1>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
+          <h1 className="text-3xl font-bold text-white">
+            Simulation Dashboard
+          </h1>
+        </div>
         <p className="text-slate-400 max-w-2xl">
           Manage your phishing simulations, track employee risk scores, and orchestrate multi-channel testing campaigns.
         </p>
@@ -88,11 +93,11 @@ const Dashboard = () => {
             <Activity className="text-cyan-400" size={20} />
             Quick Actions
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {dashboardCard.map((card) => (
               <GlassCard
                 key={card.id}
-                className="cursor-pointer group relative overflow-hidden"
+                className="cursor-pointer group relative overflow-hidden p-6"
                 onClick={() => navigate(card.route)}
               >
                 <div className="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -122,7 +127,7 @@ const Dashboard = () => {
         {/* Activity Feed / System Status - Placeholder for now */}
         <div className="space-y-6">
           <h2 className="text-xl font-semibold text-white">System Status</h2>
-          <GlassCard className="h-full min-h-[300px]">
+          <GlassCard className="h-full min-h-[300px] p-6">
             <div className="space-y-6">
               {[
                 { label: 'Email Service', status: 'Operational', color: 'bg-emerald-500' },

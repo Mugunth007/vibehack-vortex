@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { Group, Person, Add, UploadFile as UploadFileIcon, MoreVert as MoreVertIcon, Delete as DeleteIcon } from '@mui/icons-material';
 // Sidebar removed
-import Footer from '../../components/Footer';
+
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAudience } from '../../hooks/useAudience';
 
@@ -496,7 +496,7 @@ const AudienceDetail = () => {
                         onDeleteContact={handleDeleteContact}
                     />
                 </Container>
-                <Footer />
+
             </Box>
 
             {/* Delete Audience Dialog */}

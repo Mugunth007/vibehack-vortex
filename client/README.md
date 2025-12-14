@@ -1,10 +1,10 @@
-# Vortex Frontend (Client)
+# Decoy Frontend (Client)
 
-This folder contains the frontend code for the Vortex project. The application is built with [React](https://reactjs.org/) using [Create React App](https://create-react-app.dev/).
+This folder contains the frontend code for the Decoy project. The application is built with [React](https://reactjs.org/) using [Create React App](https://create-react-app.dev/).
 
 ## Project Overview
 
-Vortex is a phishing simulation and awareness platform. The client (this folder) provides the user interface for managing campaigns, audiences, templates, sender profiles, and viewing analytics.
+Decoy is a phishing simulation and awareness platform. The client (this folder) provides the user interface for managing campaigns, audiences, templates, sender profiles, and viewing analytics.
 
 ## Getting Started
 

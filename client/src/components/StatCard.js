@@ -12,7 +12,7 @@ const StatCard = ({ label, value, change, icon: Icon, trend = 'up', data = [] })
     ];
 
     return (
-        <GlassCard className="relative overflow-hidden group">
+        <GlassCard className="relative overflow-hidden group p-6">
             <div className="flex justify-between items-start mb-4">
                 <div className="p-2 bg-slate-800/50 rounded-lg text-slate-300 group-hover:text-white transition-colors">
                     {Icon && <Icon size={20} />}

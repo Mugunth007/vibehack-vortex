@@ -17,7 +17,7 @@ import {
     TableHead,
     TableRow
 } from '@mui/material';
-import { 
+import {
     HighlightOff as HighlightOffIcon,
     Email as EmailIcon,
     Settings as SettingsIcon,
@@ -25,16 +25,16 @@ import {
 } from '@mui/icons-material';
 import { formatDataGridDate } from '../utils/dateUtils';
 
-const ResponsiveSenderProfilesTable = ({ 
-    senderProfiles, 
-    loading, 
-    onDeleteProfile 
+const ResponsiveSenderProfilesTable = ({
+    senderProfiles,
+    loading,
+    onDeleteProfile
 }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'lg'));
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
-    
+
     // Add window width state for continuous resizing
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -85,7 +85,7 @@ const ResponsiveSenderProfilesTable = ({
         switch (column) {
             case 'senderName':
                 return (
-                    <Typography sx={{ 
+                    <Typography sx={{
                         fontWeight: 500,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
@@ -96,7 +96,7 @@ const ResponsiveSenderProfilesTable = ({
                 );
             case 'host':
                 return (
-                    <Typography sx={{ 
+                    <Typography sx={{
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
@@ -108,7 +108,7 @@ const ResponsiveSenderProfilesTable = ({
                 );
             case 'port':
                 return (
-                    <Typography sx={{ 
+                    <Typography sx={{
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
@@ -120,7 +120,7 @@ const ResponsiveSenderProfilesTable = ({
                 );
             case 'email':
                 return (
-                    <Typography sx={{ 
+                    <Typography sx={{
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap'
@@ -130,7 +130,7 @@ const ResponsiveSenderProfilesTable = ({
                 );
             case 'secure':
                 return (
-                    <Chip 
+                    <Chip
                         size="small"
                         label={profile.secure ? "SSL/TLS" : "None"}
                         color={profile.secure ? "success" : "default"}
@@ -139,7 +139,7 @@ const ResponsiveSenderProfilesTable = ({
                 );
             case 'created':
                 return (
-                    <Typography sx={{ 
+                    <Typography sx={{
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
@@ -153,8 +153,8 @@ const ResponsiveSenderProfilesTable = ({
                 return (
                     <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
                         <Tooltip title="Delete Profile">
-                            <IconButton 
-                                color="error" 
+                            <IconButton
+                                color="error"
                                 size="small"
                                 onClick={() => onDeleteProfile(profile._id)}
                             >
@@ -172,9 +172,9 @@ const ResponsiveSenderProfilesTable = ({
     const renderMobileCards = () => (
         <Box sx={{ mt: 2 }}>
             {profiles.map((profile, index) => (
-                <Card 
-                    key={profile._id} 
-                    sx={{ 
+                <Card
+                    key={profile._id}
+                    sx={{
                         borderRadius: 0,
                         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                         borderBottom: index < profiles.length - 1 ? '1px solid rgba(224, 224, 224, 0.5)' : 'none',
@@ -189,7 +189,7 @@ const ResponsiveSenderProfilesTable = ({
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                             <Box sx={{ flex: 1, minWidth: 0 }}>
                                 {/* Sender Name */}
-                                <Typography sx={{ 
+                                <Typography sx={{
                                     fontWeight: 600,
                                     fontSize: '1rem',
                                     overflow: 'hidden',
@@ -199,9 +199,9 @@ const ResponsiveSenderProfilesTable = ({
                                 }}>
                                     {profile.senderName || 'Unnamed Profile'}
                                 </Typography>
-                                
+
                                 {/* Host and Port */}
-                                <Typography sx={{ 
+                                <Typography sx={{
                                     fontSize: '0.875rem',
                                     color: 'text.secondary',
                                     overflow: 'hidden',
@@ -216,7 +216,7 @@ const ResponsiveSenderProfilesTable = ({
                                 {/* Email and Security */}
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
                                     {profile.email && (
-                                        <Typography sx={{ 
+                                        <Typography sx={{
                                             fontSize: '0.75rem',
                                             color: 'text.secondary',
                                             overflow: 'hidden',
@@ -226,7 +226,7 @@ const ResponsiveSenderProfilesTable = ({
                                             {profile.email}
                                         </Typography>
                                     )}
-                                    <Chip 
+                                    <Chip
                                         size="small"
                                         label={profile.secure ? "SSL/TLS" : "None"}
                                         color={profile.secure ? "success" : "default"}
@@ -234,12 +234,12 @@ const ResponsiveSenderProfilesTable = ({
                                     />
                                 </Box>
                             </Box>
-                            
+
                             {/* Actions */}
                             <Box sx={{ display: 'flex', gap: 0.5, ml: 1 }}>
                                 <Tooltip title="Delete Profile">
-                                    <IconButton 
-                                        color="error" 
+                                    <IconButton
+                                        color="error"
                                         size="small"
                                         onClick={() => onDeleteProfile(profile._id)}
                                     >
@@ -258,10 +258,10 @@ const ResponsiveSenderProfilesTable = ({
 
     if (loading) {
         return (
-            <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center', 
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
                 minHeight: '300px',
                 flexDirection: 'column',
                 gap: 2
@@ -274,12 +274,12 @@ const ResponsiveSenderProfilesTable = ({
 
     if (senderProfiles.length === 0) {
         return (
-            <Box sx={{ 
-                textAlign: 'center', 
+            <Box sx={{
+                textAlign: 'center',
                 py: 4,
-                backgroundColor: '#fafafa',
+                backgroundColor: 'rgba(15, 23, 42, 0.5)',
                 borderRadius: 2,
-                border: '1px dashed #ccc'
+                border: '1px dashed #334155'
             }}>
                 <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
                     No sender profiles found
@@ -306,18 +306,18 @@ const ResponsiveSenderProfilesTable = ({
     // Use custom table for desktop only (1024px and above)
     return (
         <Box>
-            <Box sx={{ 
+            <Box sx={{
                 width: '100%',
                 overflow: 'auto',
                 borderRadius: 2,
                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                backgroundColor: '#fff',
-                border: '1px solid rgba(0,0,0,0.08)'
+                backgroundColor: 'transparent',
+                border: '1px solid #1e293b'
             }}>
                 <TableContainer>
                     <Table sx={{ minWidth: 650 }}>
                         <TableHead>
-                            <TableRow sx={{ backgroundColor: '#fafafa' }}>
+                            <TableRow sx={{ backgroundColor: 'rgba(15, 23, 42, 0.5)' }}>
                                 {visibleColumns.map((column) => (
                                     <TableCell
                                         key={column}

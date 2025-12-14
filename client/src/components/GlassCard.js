@@ -1,14 +1,23 @@
 import React from 'react';
-import { cn } from '../utils/cn'; // Note: Need to create cn utility or just use template literals if preferred, but cn is standard. I'll stick to template literals for now to minimize files, or create utils/cn.js quickly.
 
-// I'll assume I can create the utils/cn.js helper as it's best practice with tailwind-merge
 const GlassCard = ({ children, className, hoverEffect = true, ...props }) => {
     return (
         <div
-            className={`glass-card p-6 rounded-xl ${hoverEffect ? 'glass-card-hover' : ''} ${className || ''}`}
+            className={`
+                relative overflow-hidden rounded-2xl border border-slate-800/60
+                bg-slate-950/40 backdrop-blur-xl
+                ${hoverEffect ? 'hover:border-slate-700/80 hover:bg-slate-900/50 hover:shadow-2xl hover:shadow-cyan-900/10 transition-all duration-300' : ''}
+                ${className || ''}
+            `}
             {...props}
         >
-            {children}
+            {/* Noise Texture Overlay */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+
+            {/* Content */}
+            <div className="relative z-10">
+                {children}
+            </div>
         </div>
     );
 };

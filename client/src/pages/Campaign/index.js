@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import { Typography, Container, Box, Button, Grid, Card, CardContent, Chip, CircularProgress, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import AddIcon from '@mui/icons-material/Add';
-// Sidebar removed
-import Footer from '../../components/Footer';
+import { Plus, Megaphone, Loader2, AlertCircle, CheckCircle, Clock, Play } from 'lucide-react';
 import { useGetAllCampaigns } from '../../hooks/useCampaign';
 import { formatCardDate } from '../../utils/dateUtils';
+import GlassCard from '../../components/GlassCard';
+import GradientButton from '../../components/GradientButton';
 
 const Campaign = () => {
     const navigate = useNavigate();
@@ -23,136 +22,150 @@ const Campaign = () => {
         navigate(`/console/campaign/${id}`);
     };
 
+    const getStatusConfig = (status) => {
+        switch (status) {
+            case 'completed':
+                return {
+                    icon: CheckCircle,
+                    color: 'text-emerald-400',
+                    bg: 'bg-emerald-500/20',
+                    border: 'border-emerald-500/30'
+                };
+            case 'ongoing':
+                return {
+                    icon: Play,
+                    color: 'text-cyan-400',
+                    bg: 'bg-cyan-500/20',
+                    border: 'border-cyan-500/30'
+                };
+            case 'scheduled':
+                return {
+                    icon: Clock,
+                    color: 'text-amber-400',
+                    bg: 'bg-amber-500/20',
+                    border: 'border-amber-500/30'
+                };
+            default:
+                return {
+                    icon: Megaphone,
+                    color: 'text-slate-400',
+                    bg: 'bg-slate-500/20',
+                    border: 'border-slate-500/30'
+                };
+        }
+    };
+
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: "#fafafa" }}>
-            {/* Sidebar removed */}
-            <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                <Container maxWidth="lg" sx={{ flexGrow: 1, mt: '110px', mb: 2 }}>
-                    <Grid container spacing={2} sx={{ mb: 2 }}>
-                        <Grid sx={{ pl: 2, pb: 2 }} xs={12} md={8} lg={8}>
-                            <Typography
-                                sx={{
-                                    mb: 1,
-                                    fontWeight: 500,
-                                    background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
-                                    backgroundClip: 'text',
-                                    WebkitBackgroundClip: 'text',
-                                    WebkitTextFillColor: 'transparent',
-                                    fontSize: { xs: '1rem', md: '1.5rem' }
-                                }}
-                                variant="h4"
-                                color="primary"
+        <div className="space-y-8 animate-fade-in-up">
+            {/* Page Header */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+                            <Megaphone className="w-5 h-5 text-white" />
+                        </div>
+                        <h1 className="text-3xl font-bold text-white">
+                            Campaigns
+                        </h1>
+                    </div>
+                    <p className="text-slate-400 max-w-2xl">
+                        Launch and manage phishing campaigns. Track their status, view details, and make informed decisions.
+                    </p>
+                </div>
+                <GradientButton
+                    onClick={handleStartCampaign}
+                    icon={Plus}
+                    className="w-full md:w-auto px-6 h-12"
+                >
+                    Start Campaign
+                </GradientButton>
+            </div>
+
+            {/* Loading State */}
+            {loading && (
+                <div className="flex items-center justify-center py-16">
+                    <div className="flex items-center gap-3 text-slate-400">
+                        <Loader2 className="w-6 h-6 animate-spin text-cyan-400" />
+                        <span>Loading campaigns...</span>
+                    </div>
+                </div>
+            )}
+
+            {/* Error State */}
+            {error && (
+                <GlassCard className="p-6 border-rose-500/30 !bg-rose-500/10">
+                    <div className="flex items-center gap-3 text-rose-400">
+                        <AlertCircle className="w-5 h-5" />
+                        <span>{error}</span>
+                    </div>
+                </GlassCard>
+            )}
+
+            {/* Empty State */}
+            {!loading && !error && campaigns.length === 0 && (
+                <GlassCard className="p-12 text-center">
+                    <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-slate-800/50 flex items-center justify-center">
+                        <Megaphone className="w-8 h-8 text-slate-500" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-2">No campaigns found</h3>
+                    <p className="text-slate-400 mb-6 max-w-md mx-auto">
+                        You haven't created any campaigns yet. Create your first campaign to get started.
+                    </p>
+                    <GradientButton
+                        onClick={handleStartCampaign}
+                        icon={Plus}
+                        className="mx-auto p-4"
+                    >
+                        Start Your First Campaign
+                    </GradientButton>
+                </GlassCard>
+            )}
+
+            {/* Campaign Cards Grid */}
+            {!loading && !error && campaigns.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {campaigns.map((campaign) => {
+                        const statusConfig = getStatusConfig(campaign.status);
+                        const StatusIcon = statusConfig.icon;
+
+                        return (
+                            <GlassCard
+                                key={campaign._id}
+                                className="p-6 cursor-pointer group hover:border-cyan-500/30 transition-all duration-300"
+                                onClick={() => handleViewCampaign(campaign._id)}
                             >
-                                Campaigns
-                            </Typography>
-                            <Typography sx={{ fontSize: '0.8rem' }} color="text.secondary">
-                                Launch and manage phishing campaigns. Track their status, view details, and make informed decisions for better awareness and security.
-                            </Typography>
-                        </Grid>
-                        <Grid sx={{ p: 2 }} xs={12} md={4} lg={4}>
-                            <Grid container justifyContent="flex-end">
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleStartCampaign}
-                                    startIcon={<AddIcon />}
-                                >
-                                    Start Campaign
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                                <div className="flex items-start justify-between mb-4">
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="text-lg font-semibold text-white truncate group-hover:text-cyan-400 transition-colors">
+                                            {campaign.name}
+                                        </h3>
+                                        <p className="text-sm text-slate-500 mt-1">
+                                            Created {formatCardDate(campaign.createdAt)}
+                                        </p>
+                                    </div>
+                                </div>
 
-                    {loading ? (
-                        <CircularProgress />
-                    ) : error ? (
-                        <Alert severity="error">{error}</Alert>
-                    ) : campaigns.length === 0 ? (
-                        <Box sx={{
-                            textAlign: 'center',
-                            py: 4,
-                            backgroundColor: '#fafafa',
-                            borderRadius: 2,
-                            border: '1px dashed #ccc'
-                        }}>
-                            <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
-                                No campaigns found
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                You haven't created any campaigns yet. Create your first campaign to get started.
-                            </Typography>
-                        </Box>
-                    ) : (
-                        <Grid sx={{
-                            maxWidth: '100%',
-                            overflowX: 'hidden', // Prevent horizontal scrolling
-                        }}
-                            container spacing={3}>
-                            {campaigns.map((campaign) => (
-                                <Grid
-                                    item
-                                    xs={12}
-                                    sm={6}
-                                    md={4}
-                                    key={campaign._id}
-                                    sx={{
-                                        padding: 2, // Ensures shadow has space to render
-                                    }}
-                                >
-                                    <Card
-                                        onClick={() => handleViewCampaign(campaign._id)}
-                                        sx={{
-                                            maxWidth: '100%',
-                                            cursor: 'pointer',
-                                            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', // Strong shadow
-                                            backgroundColor: '#ffffff', // Contrast with shadow
-                                            transition: '0.3s',
-                                            '&:hover': {
-                                                boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.3)', // More pronounced on hover
-                                                backgroundColor: '#f5f5f5', // Subtle hover background change
-                                            },
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography
-                                                sx={{
-                                                    whiteSpace: 'nowrap',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    maxWidth: '100%',
-                                                    display: 'block',
-                                                    fontWeight: 500,            // Medium weight
-                                                    color: '#1a1a1a',           // Dark gray (less harsh than pure black)
-                                                }}
-                                                variant="h6" component="div">
-                                                {campaign.name}
-                                            </Typography>
-                                            <Typography sx={{ mb: 1.5 }} variant="subtitle2" color="text.secondary">
-                                                Created {formatCardDate(campaign.createdAt)}
-                                            </Typography>
-                                            <Chip
-                                                label={campaign.status}
-                                                color={
-                                                    campaign.status === 'completed'
-                                                        ? 'success'
-                                                        : campaign.status === 'ongoing'
-                                                            ? 'primary'
-                                                            : campaign.status === 'scheduled'
-                                                                ? 'warning'
-                                                                : 'default'
-                                                }
-                                            />
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    )}
+                                {/* Status Badge */}
+                                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg ${statusConfig.bg} ${statusConfig.border} border`}>
+                                    <StatusIcon className={`w-4 h-4 ${statusConfig.color}`} />
+                                    <span className={`text-sm font-medium capitalize ${statusConfig.color}`}>
+                                        {campaign.status}
+                                    </span>
+                                </div>
 
-                </Container>
-                <Footer />
-            </Box>
-        </Box >
+                                {/* Hover indicator */}
+                                <div className="mt-4 pt-4 border-t border-slate-800/50 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span className="text-xs text-slate-500">Click to view details</span>
+                                    <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                                        <Megaphone className="w-3 h-3 text-cyan-400" />
+                                    </div>
+                                </div>
+                            </GlassCard>
+                        );
+                    })}
+                </div>
+            )}
+        </div>
     );
 };
 
