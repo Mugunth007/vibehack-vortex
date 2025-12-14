@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
+import ChatWidget from './components/ChatWidget';
 import './App.css';
 
 import LandingPage from './pages/LandingPage';
@@ -22,6 +23,9 @@ import Templates from './pages/Templates';
 import Campaign from './pages/Campaign';
 import StartCampaign from './pages/Campaign/StartCampaign';
 import CampaignDetail from './pages/Campaign/CampaignDetail';
+
+import Training from './pages/Training';
+import Reports from './pages/Reports';
 
 import NotFoundPage from './pages/NotFound';
 
@@ -153,9 +157,14 @@ function App() {
         <Route path="/console/campaign/create" element={<ProtectedRoute><Layout><StartCampaign /></Layout></ProtectedRoute>} />
         <Route path="/console/campaign/:id" element={<ProtectedRoute><Layout><CampaignDetail /></Layout></ProtectedRoute>} />
 
+        <Route path="/console/training" element={<ProtectedRoute><Layout><Training /></Layout></ProtectedRoute>} />
+        <Route path="/console/reports" element={<ProtectedRoute><Layout><Reports /></Layout></ProtectedRoute>} />
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
+      {/* Global Chat Widget */}
+      <ChatWidget />
 
     </ThemeProvider>
   );

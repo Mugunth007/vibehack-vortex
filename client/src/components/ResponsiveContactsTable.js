@@ -29,8 +29,8 @@ import {
     MenuItem,
     Grid
 } from '@mui/material';
-import { 
-    Visibility as VisibilityIcon, 
+import {
+    Visibility as VisibilityIcon,
     HighlightOff as HighlightOffIcon,
     Email as EmailIcon,
     Person as PersonIcon,
@@ -39,17 +39,17 @@ import {
     Search as SearchIcon
 } from '@mui/icons-material';
 
-const ResponsiveContactsTable = ({ 
-    contacts, 
-    loading, 
-    onViewContact, 
-    onDeleteContact 
+const ResponsiveContactsTable = ({
+    contacts,
+    loading,
+    onViewContact,
+    onDeleteContact
 }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'lg'));
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
-    
+
     // Add window width state for continuous resizing
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -76,10 +76,10 @@ const ResponsiveContactsTable = ({
         const role = (contact.role || '').toLowerCase();
         const country = (contact.country || '').toLowerCase();
 
-        return fullName.includes(searchLower) || 
-               email.includes(searchLower) || 
-               role.includes(searchLower) || 
-               country.includes(searchLower);
+        return fullName.includes(searchLower) ||
+            email.includes(searchLower) ||
+            role.includes(searchLower) ||
+            country.includes(searchLower);
     });
 
     // Calculate pagination
@@ -121,7 +121,7 @@ const ResponsiveContactsTable = ({
             case 'name':
                 const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim();
                 return (
-                    <Typography sx={{ 
+                    <Typography sx={{
                         fontWeight: 500,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
@@ -132,7 +132,7 @@ const ResponsiveContactsTable = ({
                 );
             case 'email':
                 return (
-                    <Typography sx={{ 
+                    <Typography sx={{
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap'
@@ -142,7 +142,7 @@ const ResponsiveContactsTable = ({
                 );
             case 'role':
                 return (
-                    <Typography sx={{ 
+                    <Typography sx={{
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap'
@@ -152,7 +152,7 @@ const ResponsiveContactsTable = ({
                 );
             case 'country':
                 return (
-                    <Typography sx={{ 
+                    <Typography sx={{
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap'
@@ -164,8 +164,8 @@ const ResponsiveContactsTable = ({
                 return (
                     <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
                         <Tooltip title="View Details">
-                            <IconButton 
-                                color="primary" 
+                            <IconButton
+                                color="primary"
                                 size="small"
                                 onClick={() => onViewContact(contact)}
                             >
@@ -173,8 +173,8 @@ const ResponsiveContactsTable = ({
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Delete Contact">
-                            <IconButton 
-                                color="error" 
+                            <IconButton
+                                color="error"
                                 size="small"
                                 onClick={() => onDeleteContact(contact._id)}
                             >
@@ -194,15 +194,15 @@ const ResponsiveContactsTable = ({
             {paginatedContacts.map((contact, index) => {
                 const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim();
                 return (
-                    <Card 
-                        key={contact._id} 
-                        sx={{ 
-                            borderRadius: 0, // Remove border radius for seamless stacking
-                            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                            borderBottom: index < paginatedContacts.length - 1 ? '1px solid rgba(224, 224, 224, 0.5)' : 'none',
+                    <Card
+                        key={contact._id}
+                        sx={{
+                            borderRadius: 0,
+                            boxShadow: 'none',
+                            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                            borderBottom: index < paginatedContacts.length - 1 ? '1px solid rgba(100, 116, 139, 0.2)' : 'none',
                             '&:hover': {
-                                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                                transform: 'translateY(-1px)',
+                                backgroundColor: 'rgba(30, 41, 59, 0.8)',
                                 transition: 'all 0.2s ease-in-out'
                             }
                         }}
@@ -211,7 +211,7 @@ const ResponsiveContactsTable = ({
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <Box sx={{ flex: 1, minWidth: 0 }}>
                                     {/* Name */}
-                                    <Typography sx={{ 
+                                    <Typography sx={{
                                         fontWeight: 600,
                                         fontSize: '1rem',
                                         overflow: 'hidden',
@@ -221,9 +221,9 @@ const ResponsiveContactsTable = ({
                                     }}>
                                         {fullName || 'Unnamed Contact'}
                                     </Typography>
-                                    
+
                                     {/* Email */}
-                                    <Typography sx={{ 
+                                    <Typography sx={{
                                         fontSize: '0.875rem',
                                         color: 'text.secondary',
                                         overflow: 'hidden',
@@ -233,12 +233,12 @@ const ResponsiveContactsTable = ({
                                         {contact.email}
                                     </Typography>
                                 </Box>
-                                
+
                                 {/* Actions */}
                                 <Box sx={{ display: 'flex', gap: 0.5, ml: 1 }}>
                                     <Tooltip title="View Details">
-                                        <IconButton 
-                                            color="primary" 
+                                        <IconButton
+                                            color="primary"
                                             size="small"
                                             onClick={() => onViewContact(contact)}
                                         >
@@ -246,8 +246,8 @@ const ResponsiveContactsTable = ({
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip title="Delete Contact">
-                                        <IconButton 
-                                            color="error" 
+                                        <IconButton
+                                            color="error"
                                             size="small"
                                             onClick={() => onDeleteContact(contact._id)}
                                         >
@@ -291,7 +291,7 @@ const ResponsiveContactsTable = ({
                                     },
                                 },
                                 '& .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: 'rgba(0, 0, 0, 0.23)',
+                                    borderColor: 'rgba(100, 116, 139, 0.3)',
                                 },
                                 '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                                     borderColor: 'primary.main',
@@ -306,17 +306,17 @@ const ResponsiveContactsTable = ({
 
     // Pagination component with enhanced layout
     const renderPagination = () => (
-        <Box sx={{ 
-            display: 'flex', 
+        <Box sx={{
+            display: 'flex',
             flexDirection: { xs: 'column', sm: 'row' },
-            justifyContent: 'space-between', 
-            alignItems: { xs: 'stretch', sm: 'center' }, 
+            justifyContent: 'space-between',
+            alignItems: { xs: 'stretch', sm: 'center' },
             mt: 3,
             px: 1,
             gap: { xs: 3, sm: 0 }
         }}>
-            <FormControl size="small" sx={{ 
-                minWidth: 80, 
+            <FormControl size="small" sx={{
+                minWidth: 80,
                 alignSelf: { xs: 'center', sm: 'flex-start' },
                 mb: { xs: 2, sm: 0 }
             }}>
@@ -326,11 +326,11 @@ const ResponsiveContactsTable = ({
                         setRowsPerPage(e.target.value);
                         setCurrentPage(1);
                     }}
-                    sx={{ 
+                    sx={{
                         borderRadius: 2,
                         backgroundColor: 'transparent',
                         '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'rgba(0, 0, 0, 0.23)',
+                            borderColor: 'rgba(100, 116, 139, 0.3)',
                         },
                         '&:hover .MuiOutlinedInput-notchedOutline': {
                             borderColor: 'primary.main',
@@ -346,14 +346,14 @@ const ResponsiveContactsTable = ({
                     <MenuItem value={50}>50 per page</MenuItem>
                 </Select>
             </FormControl>
-            
-            <Box sx={{ 
-                display: 'flex', 
+
+            <Box sx={{
+                display: 'flex',
                 flexDirection: { xs: 'column', sm: 'row' },
-                alignItems: { xs: 'center', sm: 'center' }, 
+                alignItems: { xs: 'center', sm: 'center' },
                 gap: { xs: 2, sm: 2 }
             }}>
-                <Typography variant="body2" color="text.secondary" sx={{ 
+                <Typography variant="body2" color="text.secondary" sx={{
                     textAlign: { xs: 'center', sm: 'left' },
                     mb: { xs: 1, sm: 0 }
                 }}>
@@ -379,10 +379,10 @@ const ResponsiveContactsTable = ({
 
     if (loading) {
         return (
-            <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center', 
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
                 minHeight: '300px',
                 flexDirection: 'column',
                 gap: 2
@@ -395,12 +395,12 @@ const ResponsiveContactsTable = ({
 
     if (contacts.length === 0) {
         return (
-            <Box sx={{ 
-                textAlign: 'center', 
+            <Box sx={{
+                textAlign: 'center',
                 py: 4,
-                backgroundColor: '#fafafa',
+                backgroundColor: 'rgba(15, 23, 42, 0.5)',
                 borderRadius: 2,
-                border: '1px dashed #ccc'
+                border: '1px dashed rgba(100, 116, 139, 0.3)'
             }}>
                 <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
                     No contacts found
@@ -430,18 +430,19 @@ const ResponsiveContactsTable = ({
     return (
         <Box>
             {renderControls()}
-            <Box sx={{ 
+            <Box sx={{
                 width: '100%',
                 overflow: 'auto',
                 borderRadius: 2,
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                backgroundColor: '#fff',
-                border: '1px solid rgba(0,0,0,0.08)'
+                boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                border: '1px solid rgba(100, 116, 139, 0.2)',
+                backdropFilter: 'blur(12px)'
             }}>
                 <TableContainer>
                     <Table sx={{ minWidth: 650 }}>
                         <TableHead>
-                            <TableRow sx={{ backgroundColor: '#fafafa' }}>
+                            <TableRow sx={{ backgroundColor: 'rgba(30, 41, 59, 0.8)' }}>
                                 {visibleColumns.map((column) => (
                                     <TableCell
                                         key={column}
@@ -449,7 +450,7 @@ const ResponsiveContactsTable = ({
                                             width: getColumnWidth(column),
                                             fontWeight: 600,
                                             color: 'text.primary',
-                                            borderBottom: '2px solid rgba(224, 224, 224, 1)',
+                                            borderBottom: '2px solid rgba(100, 116, 139, 0.3)',
                                             padding: '16px',
                                             fontSize: '0.8rem',
                                             textTransform: 'uppercase',
@@ -467,7 +468,7 @@ const ResponsiveContactsTable = ({
                                     key={contact._id}
                                     sx={{
                                         '&:hover': {
-                                            backgroundColor: 'rgba(25, 118, 210, 0.04)',
+                                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
                                             transition: 'background-color 0.2s ease-in-out'
                                         },
                                         '&:last-child td': {
@@ -481,7 +482,7 @@ const ResponsiveContactsTable = ({
                                             sx={{
                                                 width: getColumnWidth(column),
                                                 padding: '12px 16px',
-                                                borderBottom: '1px solid rgba(224, 224, 224, 1)',
+                                                borderBottom: '1px solid rgba(100, 116, 139, 0.2)',
                                                 fontSize: '0.875rem'
                                             }}
                                         >

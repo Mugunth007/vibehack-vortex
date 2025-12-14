@@ -1,335 +1,313 @@
-// AIBuilder.js
+// AIBuilder.js - AI-Powered Email Generator
 import React, { useState } from 'react';
-import { 
-    Box, 
-    Typography, 
-    Card, 
-    CardContent, 
-    Grid, 
-    TextField,
-    Paper,
-    IconButton,
-    Tooltip,
-    Divider,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel
-} from '@mui/material';
 import {
-    AutoAwesome as AutoAwesomeIcon,
-    Email as EmailIcon,
-    ContentCopy as ContentCopyIcon
-} from '@mui/icons-material';
+    Sparkles,
+    Copy,
+    Save,
+    AlertTriangle,
+    Loader2,
+    CheckCircle2,
+    Mail,
+    Zap
+} from 'lucide-react';
+import { useAI } from '../../hooks/useAI';
+import { useTemplates } from '../../hooks/useTemplates';
 
 const AIBuilder = () => {
+    const [formData, setFormData] = useState({
+        targetAudience: 'general-employees',
+        objective: 'initial-awareness',
+        threatType: 'credential-harvesting',
+        industry: 'general',
+        tone: 'formal-corporate',
+        trigger: 'none',
+        callToAction: 'click-link',
+        customContext: ''
+    });
 
+    const { loading, error, generatedEmail, generateEmail, clearEmail } = useAI();
+    const { createTemplate } = useTemplates();
+    const [copied, setCopied] = useState(false);
+    const [saved, setSaved] = useState(false);
+    const [saveError, setSaveError] = useState(null);
 
+    const options = {
+        targetAudience: [
+            { value: 'it-staff', label: 'IT Staff' },
+            { value: 'executives', label: 'Executives' },
+            { value: 'finance', label: 'Finance Team' },
+            { value: 'hr', label: 'HR Department' },
+            { value: 'sales', label: 'Sales Team' },
+            { value: 'general-employees', label: 'General Employees' },
+            { value: 'contractors', label: 'Contractors' },
+            { value: 'new-hires', label: 'New Hires' }
+        ],
+        objective: [
+            { value: 'initial-awareness', label: 'Initial Awareness' },
+            { value: 'advanced-training', label: 'Advanced Training' },
+            { value: 'compliance-training', label: 'Compliance Training' },
+            { value: 'incident-response', label: 'Incident Response' },
+            { value: 'social-engineering', label: 'Social Engineering' },
+            { value: 'data-protection', label: 'Data Protection' }
+        ],
+        threatType: [
+            { value: 'credential-harvesting', label: 'Credential Harvesting' },
+            { value: 'malware-distribution', label: 'Malware Distribution' },
+            { value: 'business-email-compromise', label: 'Business Email Compromise' },
+            { value: 'social-engineering', label: 'Social Engineering' },
+            { value: 'data-exfiltration', label: 'Data Exfiltration' },
+            { value: 'ransomware-precursor', label: 'Ransomware Precursor' }
+        ],
+        industry: [
+            { value: 'general', label: 'General Business' },
+            { value: 'healthcare', label: 'Healthcare' },
+            { value: 'financial-services', label: 'Financial Services' },
+            { value: 'technology', label: 'Technology' },
+            { value: 'manufacturing', label: 'Manufacturing' },
+            { value: 'government', label: 'Government' },
+            { value: 'education', label: 'Education' },
+            { value: 'retail', label: 'Retail' }
+        ],
+        tone: [
+            { value: 'formal-corporate', label: 'Formal Corporate' },
+            { value: 'urgent-time-sensitive', label: 'Urgent / Time-Sensitive' },
+            { value: 'friendly-collegial', label: 'Friendly / Collegial' },
+            { value: 'authoritative', label: 'Authoritative' },
+            { value: 'technical', label: 'Technical' }
+        ],
+        trigger: [
+            { value: 'none', label: 'No Specific Trigger' },
+            { value: 'tax-season', label: 'Tax Season' },
+            { value: 'holidays', label: 'Holiday Season' },
+            { value: 'year-end', label: 'Year-End Review' },
+            { value: 'system-updates', label: 'System Updates' },
+            { value: 'policy-changes', label: 'Policy Changes' }
+        ],
+        callToAction: [
+            { value: 'click-link', label: 'Click a Link' },
+            { value: 'download-attachment', label: 'Download Attachment' },
+            { value: 'reply-information', label: 'Reply with Information' },
+            { value: 'transfer-funds', label: 'Transfer Funds' }
+        ]
+    };
 
+    const handleChange = (field, value) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+        if (generatedEmail) {
+            clearEmail();
+            setCopied(false);
+            setSaved(false);
+        }
+    };
+
+    const handleGenerate = async () => {
+        setCopied(false);
+        setSaved(false);
+        setSaveError(null);
+        await generateEmail(formData);
+    };
+
+    const handleCopy = async () => {
+        if (!generatedEmail?.htmlBody) return;
+        try {
+            await navigator.clipboard.writeText(generatedEmail.htmlBody);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy:', err);
+        }
+    };
+
+    const handleSaveAsTemplate = async () => {
+        if (!generatedEmail) return;
+        setSaveError(null);
+        const htmlContent = generatedEmail.htmlBody;
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const file = new File([blob], 'ai-generated-template.html', { type: 'text/html' });
+
+        const result = await createTemplate({
+            name: `AI Generated - ${generatedEmail.subject}`,
+            subject: generatedEmail.subject,
+            senderName: generatedEmail.senderName,
+            senderEmail: generatedEmail.senderEmail,
+            type: 'ai-generated',
+            file: file
+        });
+
+        if (result.success) {
+            setSaved(true);
+            setTimeout(() => setSaved(false), 3000);
+        } else {
+            setSaveError(result.message || 'Failed to save template');
+        }
+    };
+
+    const SelectField = ({ label, field, options: opts }) => (
+        <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">{label}</label>
+            <select
+                value={formData[field]}
+                onChange={(e) => handleChange(field, e.target.value)}
+                className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg 
+                    text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 
+                    focus:border-cyan-500 cursor-pointer"
+            >
+                {opts.map(opt => (
+                    <option key={opt.value} value={opt.value} className="bg-slate-800">
+                        {opt.label}
+                    </option>
+                ))}
+            </select>
+        </div>
+    );
 
     return (
-        <Box sx={{ mt: 2 }}>
-            {/* Hero Section */}
-            <Card sx={{ 
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: 'white',
-                mb: 3,
-                position: 'relative',
-                overflow: 'hidden'
-            }}>
-                <Box sx={{
-                    position: 'absolute',
-                    top: -50,
-                    right: -50,
-                    width: 200,
-                    height: 200,
-                    borderRadius: '50%',
-                    background: 'rgba(255,255,255,0.1)',
-                    zIndex: 1
-                }} />
-                <Box sx={{
-                    position: 'absolute',
-                    bottom: -30,
-                    left: -30,
-                    width: 150,
-                    height: 150,
-                    borderRadius: '50%',
-                    background: 'rgba(255,255,255,0.05)',
-                    zIndex: 1
-                }} />
-                <CardContent sx={{ position: 'relative', zIndex: 2, p: 4 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <AutoAwesomeIcon sx={{ fontSize: 48, mr: 2 }} />
-                        <Box>
-                            <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>
-                                AI Email Builder
-                            </Typography>
-                            <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                                Coming Soon - Revolutionize your email campaigns with AI
-                            </Typography>
-                        </Box>
-                    </Box>
-                </CardContent>
-            </Card>
+        <div style={{ fontFamily: '"Inter", sans-serif' }}>
+            {/* Header */}
+            <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 
+                    flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <Zap className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                    <h1 className="text-2xl font-bold text-white">AI Email Builder</h1>
+                    <p className="text-slate-400 text-sm">Generate realistic phishing simulation emails</p>
+                </div>
+            </div>
 
+            {/* Main Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Left - Configuration */}
+                <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6">
+                    <h2 className="text-lg font-semibold text-white mb-5">Configuration</h2>
 
+                    <div className="space-y-4">
+                        <SelectField label="Target Audience" field="targetAudience" options={options.targetAudience} />
+                        <SelectField label="Objective" field="objective" options={options.objective} />
+                        <SelectField label="Threat Type" field="threatType" options={options.threatType} />
+                        <SelectField label="Industry" field="industry" options={options.industry} />
+                        <SelectField label="Tone" field="tone" options={options.tone} />
+                        <SelectField label="Trigger" field="trigger" options={options.trigger} />
+                        <SelectField label="Call-to-Action" field="callToAction" options={options.callToAction} />
 
-            {/* Interactive Demo Section */}
-            <Card sx={{ mb: 4 }}>
-                <CardContent sx={{ p: 4 }}>
-                    <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-                        Preview Example
-                    </Typography>
-                    
-                    <Grid container spacing={4}>
-                        {/* Left Column - Compact Input Parameters */}
-                        <Grid item xs={12} md={5}>
-                            <Typography variant="h6" sx={{ mb: 4 }}>
-                                Example Parameters
-                            </Typography>
-                            
-                            {/* First Row - 2 columns */}
-                            <Grid container spacing={2} sx={{ mb: 2 }}>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth size="small">
-                                        <InputLabel>Target Audience</InputLabel>
-                                        <Select
-                                            defaultValue="general-employees"
-                                            label="Target Audience"
-                                        >
-                                            <MenuItem value="it-staff">IT Staff</MenuItem>
-                                            <MenuItem value="executives">Executives</MenuItem>
-                                            <MenuItem value="finance">Finance</MenuItem>
-                                            <MenuItem value="hr">HR</MenuItem>
-                                            <MenuItem value="sales">Sales</MenuItem>
-                                            <MenuItem value="general-employees">General</MenuItem>
-                                            <MenuItem value="contractors">Contractors</MenuItem>
-                                            <MenuItem value="new-hires">New Hires</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth size="small">
-                                        <InputLabel>Objective</InputLabel>
-                                        <Select
-                                            defaultValue="initial-awareness"
-                                            label="Objective"
-                                        >
-                                            <MenuItem value="initial-awareness">Initial Awareness</MenuItem>
-                                            <MenuItem value="advanced-training">Advanced Training</MenuItem>
-                                            <MenuItem value="compliance-training">Compliance</MenuItem>
-                                            <MenuItem value="incident-response">Incident Response</MenuItem>
-                                            <MenuItem value="social-engineering">Social Engineering</MenuItem>
-                                            <MenuItem value="data-protection">Data Protection</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
-                            
-                            {/* Second Row - 2 columns */}
-                            <Grid container spacing={2} sx={{ mb: 2 }}>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth size="small">
-                                        <InputLabel>Threat Type</InputLabel>
-                                        <Select
-                                            defaultValue="credential-harvesting"
-                                            label="Threat Type"
-                                        >
-                                            <MenuItem value="credential-harvesting">Credential Harvesting</MenuItem>
-                                            <MenuItem value="malware-distribution">Malware</MenuItem>
-                                            <MenuItem value="business-email-compromise">BEC</MenuItem>
-                                            <MenuItem value="social-engineering">Social Engineering</MenuItem>
-                                            <MenuItem value="data-exfiltration">Data Exfiltration</MenuItem>
-                                            <MenuItem value="ransomware-precursor">Ransomware</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth size="small">
-                                        <InputLabel>Industry</InputLabel>
-                                        <Select
-                                            defaultValue="general"
-                                            label="Industry"
-                                        >
-                                            <MenuItem value="general">General Business</MenuItem>
-                                            <MenuItem value="healthcare">Healthcare</MenuItem>
-                                            <MenuItem value="financial-services">Financial</MenuItem>
-                                            <MenuItem value="technology">Technology</MenuItem>
-                                            <MenuItem value="manufacturing">Manufacturing</MenuItem>
-                                            <MenuItem value="government">Government</MenuItem>
-                                            <MenuItem value="education">Education</MenuItem>
-                                            <MenuItem value="retail">Retail</MenuItem>
-                                            <MenuItem value="legal">Legal</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
-                            
-                            {/* Third Row - 2 columns */}
-                            <Grid container spacing={2} sx={{ mb: 2 }}>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth size="small">
-                                        <InputLabel>Tone</InputLabel>
-                                        <Select
-                                            defaultValue="formal-corporate"
-                                            label="Tone"
-                                        >
-                                            <MenuItem value="formal-corporate">Formal</MenuItem>
-                                            <MenuItem value="urgent-time-sensitive">Urgent</MenuItem>
-                                            <MenuItem value="friendly-collegial">Friendly</MenuItem>
-                                            <MenuItem value="authoritative">Authoritative</MenuItem>
-                                            <MenuItem value="technical">Technical</MenuItem>
-                                            <MenuItem value="compliance-focused">Compliance</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth size="small">
-                                        <InputLabel>Trigger</InputLabel>
-                                        <Select
-                                            defaultValue="none"
-                                            label="Trigger"
-                                        >
-                                            <MenuItem value="none">None</MenuItem>
-                                            <MenuItem value="tax-season">Tax Season</MenuItem>
-                                            <MenuItem value="holidays">Holidays</MenuItem>
-                                            <MenuItem value="year-end">Year-end</MenuItem>
-                                            <MenuItem value="mergers-acquisitions">M&A</MenuItem>
-                                            <MenuItem value="layoffs-restructuring">Layoffs</MenuItem>
-                                            <MenuItem value="system-updates">System Updates</MenuItem>
-                                            <MenuItem value="policy-changes">Policy Changes</MenuItem>
-                                            <MenuItem value="cyber-threats">Cyber Threats</MenuItem>
-                                            <MenuItem value="custom">Custom</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
-                            
-                            {/* Fourth Row - 2 columns */}
-                            <Grid container spacing={2} sx={{ mb: 3 }}>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth size="small">
-                                        <InputLabel>Call-to-Action</InputLabel>
-                                        <Select
-                                            defaultValue="click-link"
-                                            label="Call-to-Action"
-                                        >
-                                            <MenuItem value="click-link">Click Link</MenuItem>
-                                            <MenuItem value="download-attachment">Download</MenuItem>
-                                            <MenuItem value="reply-information">Reply</MenuItem>
-                                            <MenuItem value="transfer-funds">Transfer</MenuItem>
-                                            <MenuItem value="system-access">System Access</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-                                        <Typography variant="caption" color="text.secondary">
-                                            Example parameters (feature coming soon)
-                                        </Typography>
-                                    </Box>
-                                </Grid>
-                            </Grid>
-                            
-                            {/* Custom Details */}
-                            <TextField
-                                fullWidth
-                                multiline
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">
+                                Additional Context (Optional)
+                            </label>
+                            <textarea
+                                value={formData.customContext}
+                                onChange={(e) => handleChange('customContext', e.target.value)}
+                                placeholder="Add company-specific details..."
                                 rows={3}
-                                label="Custom Context & Details"
-                                defaultValue="Create a credential harvesting email targeting IT staff, appearing to come from IT support asking for account verification due to security updates."
-                                size="small"
-                                sx={{ 
-                                    '& .MuiInputBase-input': { 
-                                        color: 'text.primary'
-                                    }
-                                }}
+                                className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg 
+                                    text-white text-sm placeholder-slate-500 focus:outline-none 
+                                    focus:ring-2 focus:ring-cyan-500 resize-none"
                             />
-                        </Grid>
-                        
-                        {/* Right Column - Enhanced Example Output */}
-                        <Grid item xs={12} md={7}>
-                            <Typography variant="h6" sx={{ mb: 3 }}>
-                                Example Output
-                            </Typography>
-                            <Paper sx={{ 
-                                p: 4,
-                                pt: 2,
-                                background: '#ffffff',
-                                border: '1px solid #e0e0e0',
-                                borderRadius: 2,
-                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                                position: 'relative'
-                            }}>
-                                {/* Email Header */}
-                                <Box sx={{ 
-                                    borderBottom: '2px solid #f0f0f0', 
-                                    pb: 1, 
-                                    mb: 2,
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center'
-                                }}>
-                                    <Box>
-                                        <Typography variant="h6" sx={{ fontWeight: 600, color: '#1976d2' }}>
-                                            HR Update - Salary Increase Notification
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            From: hr@company.com • To: you@company.com
-                                        </Typography>
-                                    </Box>
-                                    <Tooltip title="Example only - feature coming soon">
-                                        <IconButton size="small" disabled>
-                                            <ContentCopyIcon fontSize="small" />
-                                        </IconButton>
-                                    </Tooltip>
-                                </Box>
-                                
-                                {/* Email Content */}
-                                <Box sx={{ lineHeight: 1.6 }}>
-                                    <Typography variant="body1" sx={{ mb: 2 }}>
-                                        Dear Valued Employee,
-                                    </Typography>
-                                    
-                                    <Typography variant="body1" sx={{ mb: 2 }}>
-                                        We are pleased to inform you that your annual salary review has been completed. Based on your excellent performance and contributions to the company, you have been approved for a salary increase.
-                                    </Typography>
-                                    
-                                    <Typography variant="body1" sx={{ mb: 2 }}>
-                                        To view your updated compensation details and access your new pay information, please log into the HR portal using the link below:
-                                    </Typography>
-                                    
-                                    <Box sx={{ 
-                                        background: '#f8f9fa', 
-                                        p: 2, 
-                                        borderRadius: 1, 
-                                        border: '1px dashed #ccc',
-                                        mb: 2,
-                                        textAlign: 'center'
-                                    }}>
-                                        <Typography variant="body2" color="text.secondary">
-                                            🔗 [VIEW SALARY UPDATE] - hr-portal.company.com/compensation
-                                        </Typography>
-                                    </Box>
-                                    
-                                    <Typography variant="body1" sx={{ mb: 2 }}>
-                                        Please review your updated compensation package by close of business today. 
-                                        The new rates will be effective from your next pay period.
-                                    </Typography>
-                                    
-                                    <Typography variant="body2" sx={{ color: '#666', fontStyle: 'italic' }}>
-                                        Best regards,<br/>
-                                        Human Resources Team
-                                    </Typography>
-                                </Box>
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </Card>
+                        </div>
 
+                        <button
+                            onClick={handleGenerate}
+                            disabled={loading}
+                            className="w-full py-4 rounded-xl font-semibold text-white
+                                bg-gradient-to-r from-purple-600 to-cyan-600
+                                hover:from-purple-500 hover:to-cyan-500
+                                disabled:opacity-50 disabled:cursor-not-allowed
+                                shadow-lg shadow-purple-500/25 transition-all duration-300 
+                                flex items-center justify-center gap-2"
+                        >
+                            {loading ? (
+                                <><Loader2 className="w-5 h-5 animate-spin" /> Generating...</>
+                            ) : (
+                                <><Sparkles className="w-5 h-5" /> Generate Email</>
+                            )}
+                        </button>
 
-        </Box>
+                        {error && (
+                            <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                                <p className="text-red-400 text-sm flex items-center gap-2">
+                                    <AlertTriangle className="w-4 h-4" /> {error}
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Right - Output */}
+                <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6">
+                    <div className="flex items-center justify-between mb-5">
+                        <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                            <Mail className="w-5 h-5 text-cyan-400" /> Generated Email
+                        </h2>
+                        {generatedEmail && (
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={handleCopy}
+                                    className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm text-white flex items-center gap-2"
+                                >
+                                    {copied ? <CheckCircle2 className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+                                    {copied ? 'Copied' : 'Copy'}
+                                </button>
+                                <button
+                                    onClick={handleSaveAsTemplate}
+                                    className="px-3 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-sm text-white flex items-center gap-2"
+                                >
+                                    {saved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
+                                    {saved ? 'Saved' : 'Save'}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {generatedEmail ? (
+                        <div className="space-y-4">
+                            <div className="bg-slate-900 rounded-xl p-4">
+                                <p className="text-xs text-slate-500 uppercase mb-1">Subject</p>
+                                <p className="text-white font-medium">{generatedEmail.subject}</p>
+                                <p className="text-sm text-slate-400 mt-2">
+                                    From: {generatedEmail.senderName} &lt;{generatedEmail.senderEmail}&gt;
+                                </p>
+                            </div>
+
+                            <div className="bg-white rounded-xl p-5 max-h-[400px] overflow-y-auto">
+                                <div
+                                    className="prose prose-sm max-w-none text-slate-800"
+                                    dangerouslySetInnerHTML={{ __html: generatedEmail.htmlBody }}
+                                />
+                            </div>
+
+                            {generatedEmail.redFlags?.length > 0 && (
+                                <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
+                                    <h4 className="text-amber-400 font-medium text-sm mb-2 flex items-center gap-2">
+                                        <AlertTriangle className="w-4 h-4" /> Phishing Indicators
+                                    </h4>
+                                    <ul className="space-y-1">
+                                        {generatedEmail.redFlags.map((flag, i) => (
+                                            <li key={i} className="text-amber-300/80 text-sm">• {flag}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            {saveError && (
+                                <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                                    <p className="text-red-400 text-sm">{saveError}</p>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="h-[400px] flex flex-col items-center justify-center text-center">
+                            <div className="w-16 h-16 rounded-2xl bg-slate-700/50 flex items-center justify-center mb-4">
+                                <Mail className="w-8 h-8 text-slate-500" />
+                            </div>
+                            <h3 className="text-slate-400 font-medium mb-1">No Email Generated</h3>
+                            <p className="text-slate-500 text-sm max-w-[250px]">
+                                Configure and click "Generate Email" to create a phishing simulation
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
     );
 };
 

@@ -17,6 +17,10 @@ import dataExport from './dataExport.js';
 import tracking from './tracking.js';
 import user from './user.js';
 import system from './system.js';
+import ai from './ai.js';
+import chat from './chat.js';
+import training from './training.js';
+import reports from './reports.js';
 
 const router = express.Router();
 
@@ -37,19 +41,23 @@ router.use("/api/export", dataExport);
 router.use("/api/tracking", tracking);
 router.use("/api/users", user);
 router.use("/api/system", system);
+router.use("/api/ai", ai);
+router.use("/api/chat", chat);
+router.use("/api/training", training);
+router.use("/api/reports", reports);
 
 // Version endpoint
 router.get('/api/version', (req, res) => {
   try {
     const versionPath = path.join(__dirname, '..', 'VERSION');
     const versionData = fs.readFileSync(versionPath, 'utf8').trim();
-    
+
     // Parse version and release date (format: version|date)
     const [version, releaseDate] = versionData.split('|');
-    
-    res.json({ 
+
+    res.json({
       version: version || versionData, // fallback if no pipe separator
-      releaseDate: releaseDate || null 
+      releaseDate: releaseDate || null
     });
   } catch (error) {
     console.error('Error reading version:', error);

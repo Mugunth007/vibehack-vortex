@@ -9,7 +9,9 @@ import {
     LogOut,
     Menu,
     X,
-    UserCircle
+    UserCircle,
+    GraduationCap,
+    BarChart3
 } from 'lucide-react';
 import { clearToken } from '../utils/tokenManager';
 import GlassCard from './GlassCard';
@@ -29,6 +31,8 @@ const Navigation = () => {
         { label: 'Sender Profiles', icon: Send, path: '/console/sender-profile' },
         { label: 'Templates', icon: Mail, path: '/console/templates' },
         { label: 'Campaigns', icon: Megaphone, path: '/console/campaign' },
+        { label: 'Training', icon: GraduationCap, path: '/console/training' },
+        { label: 'Reports', icon: BarChart3, path: '/console/reports' },
     ];
 
     return (

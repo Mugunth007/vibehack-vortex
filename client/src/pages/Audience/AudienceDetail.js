@@ -225,7 +225,7 @@ const AudienceDetail = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: "#f0f4f7" }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: 'transparent' }}>
             {/* Sidebar removed */}
             <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 <Container maxWidth="lg" sx={{ flexGrow: 1, mt: '96px', mb: 2 }}>
@@ -304,13 +304,15 @@ const AudienceDetail = () => {
                     )}
 
                     <Card sx={{
-                        backgroundColor: "#ffffff",
+                        backgroundColor: 'rgba(15, 23, 42, 0.5)',
                         borderRadius: '16px',
-                        border: '1px solid rgba(0, 0, 0, 0.08)',
-                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                        border: '1px solid rgba(100, 116, 139, 0.2)',
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+                        backdropFilter: 'blur(12px)',
                         transition: 'all 0.2s ease-in-out',
                         '&:hover': {
-                            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)'
+                            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.4)',
+                            borderColor: 'rgba(6, 182, 212, 0.3)'
                         }
                     }}>
                         <CardContent sx={{ p: 3 }}>
@@ -354,7 +356,7 @@ const AudienceDetail = () => {
                                                     textOverflow: 'ellipsis',
                                                     maxWidth: '100%',
                                                     display: 'block',
-                                                    color: '#1a1a1a',
+                                                    color: '#f1f5f9',
                                                     fontSize: '1.25rem'
                                                 }}
                                             >
