@@ -3,7 +3,7 @@ import 'dotenv/config';
 import mongoose from 'mongoose';
 import userService from '../services/userService.js';
 
-const DB_URL = process.env.DB_URL  || 'mongodb://localhost:27017/phishintel';
+const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/decoy';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 if (!ADMIN_PASSWORD) {

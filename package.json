@@ -1,7 +1,7 @@
 {
-  "name": "phishintel",
+  "name": "decoy",
   "version": "1.0.0",
-  "description": "Built by CloudSec Network (CSN)",
+  "description": "Decoy - Security Awareness Training Platform",
   "main": "app.js",
   "type": "module",
   "scripts": {
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cloudsecnetwork/phishintel.git"
+    "url": "git+https://github.com/Mugunth007/vibehack-vortex.git"
   },
-  "author": "CSN",
+  "author": "Decoy Security",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/cloudsecnetwork/phishintel/issues"
+    "url": "https://github.com/Mugunth007/vibehack-vortex/issues"
   },
-  "homepage": "https://github.com/cloudsecnetwork/phishintel#readme",
+  "homepage": "https://github.com/Mugunth007/vibehack-vortex#readme",
   "devDependencies": {
     "@babel/cli": "^7.25.7",
     "@babel/core": "^7.25.7",
